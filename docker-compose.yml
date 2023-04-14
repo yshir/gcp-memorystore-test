@@ -1,0 +1,13 @@
+services:
+  gcloud:
+    container_name: gcloud
+    image: google/cloud-sdk:latest
+    tty: true
+    working_dir: /workspaces
+    env_file:
+      - .env
+    environment:
+      IS_CONTINER: 1
+    volumes:
+      - .:/workspaces
+
