@@ -7,19 +7,19 @@ gcloud services enable cloudfunctions.googleapis.com
 
 echo redis instance creating...
 
-gcloud redis instances create $REDIS_INSTANCE \
+gcloud redis instances create $REDIS_INSTANCE_ID -q \
   --size=2 \
   --region=$REGION \
   --redis-version=redis_6_x
 
-gcloud redis instances describe $REDIS_INSTANCE \
+gcloud redis instances describe $REDIS_INSTANCE_ID \
   --region=$REGION
 
 echo redis instance created successfully.
 
 echo vpc-access connectors creating...
 
-gcloud compute networks vpc-access connectors create $VPC_CONNECTOR \
+gcloud compute networks vpc-access connectors create $VPC_CONNECTOR -q \
   --network default \
   --range 10.8.0.0/28 \
   --region $REGION
@@ -31,12 +31,12 @@ echo vpc-access connectors created.
 
 echo cloudfunction deploy...
 
-redis_host=$(gcloud redis instances describe $REDIS_INSTANCE --region=$REGION --format="value(host)")
-redis_port=$(gcloud redis instances describe $REDIS_INSTANCE --region=$REGION --format="value(port)")
+redis_host=$(gcloud redis instances describe $REDIS_INSTANCE_ID --region=$REGION --format="value(host)")
+redis_port=$(gcloud redis instances describe $REDIS_INSTANCE_ID --region=$REGION --format="value(port)")
 
 echo "redis_host=$redis_host, redis_port=$redis_port"
 
-gcloud functions deploy $FUNCTION_NAME \
+gcloud functions deploy $FUNCTION_NAME -q \
   --region=$REGION \
   --runtime=nodejs16 \
   --source=. \
